@@ -41,6 +41,8 @@ class Player:
             self.maximum_hp = 14
             self.armour = 14
             self.damage = 1 #use of a lights sword, which is a simple melee weapon.
+            self.attack_ability = self.strength
+            self.stat = "player"
         elif character_class == "Rogue":
             self.strength = 10
             self.dexterity = 15
@@ -51,6 +53,8 @@ class Player:
             self.maximum_hp = 10
             self.armour = 12
             self.damage = 1 #use of a dagger, which is a simple melee weapon.
+            self.attack_ability = self.dexterity
+            self.stat = "player"
         elif character_class == "Wizard":
             self.strength = 8
             self.dexterity = 10
@@ -60,7 +64,9 @@ class Player:
             self.charisma = 10
             self.maximum_hp = 8
             self.armour = 10
-            self.damage = 1 #use of a staff, which is a simple melee weapon. 
+            self.damage = 1 #use of a staff, which is a simple melee weapon.
+            self.attack_ability = self.intelligence 
+            self.stat = "player"
         else:
             raise ValueError("Choose Fighter, Rogue, or Wizard.")
 
@@ -84,6 +90,7 @@ class Enemy:
             self.armour = 12
             self.attack_modifier = 0
             self.damage = 1
+            self.stat = "NPC"
         else:
             raise ValueError("Choose a valid creature type.")
 
@@ -172,9 +179,8 @@ def enter_room_one(player):
                 #lets print the entire initiave order, not just the first creature.
                 for index, entry in enumerate(Initiative_order):
                     print(f"{index + 1}. {entry['character'].character_class if isinstance(entry['character'], Player) else entry['character'].name} (Initiative: {entry['totall_initiative']})")
-                
-                
 
+                combat()
 
             else:
                 story_print("Revealing blood stained walls.", 100, "character")
@@ -274,7 +280,77 @@ def show_character_sheet(player):
     print(f"Armour: {player.armour}")
     print("----------")
     
+def attack(source, target, attack_modifier, damage):
+    """Roll a D20 with an attack modifier and return whether it hits the target's armour class."""
+    roll = random.randint(1, 20)
+    total = roll + attack_modifier
 
+    story_print(f"\n{source.character_class if isinstance(source, Player) else source.name} Attack Roll\n", 100, "character")
+    story_print(f"D20:      {roll}", 100, "character")
+    story_print(f"Modifier: {attack_modifier:+d}", 100, "character")
+    story_print(f"Total:    {total}\n", 100, "character")
+
+    if total >= target.armour:
+        story_print("HIT!", 100, "word")
+        target.current_hp = max(0, target.current_hp - damage)
+        story_print(f"{target.character_class if isinstance(target, Player) else target.name} takes {damage} damage.", 100, "character")
+        story_print(f"HP: {target.current_hp}/{target.maximum_hp}", 100, "word")
+        if target.current_hp == 0:
+            target_name = target.character_class if isinstance(target, Player) else target.name
+            story_print(f"{target_name} faints!", 100, "character")            
+
+        else:
+            story_print("The target is still standing!", 100, "character")
+        return True
+    else:
+        story_print("MISS!\n", 100, "word")
+        story_print("the target is still standing!", 100, "character")
+        return False
+
+def combat():
+    """Resolve one round of player and NPC attacks in initiative order."""
+    # Initiative_tracker already sorts the highest initiative first.
+    escaped = False
+    for entry in Initiative_order:
+        attacker = entry["character"]
+        if attacker.current_hp <= 0:
+            continue
+
+        target = None
+        if isinstance(attacker, Player):
+            story_print("Your turn, please select action:", 100, "character")
+            story_print("1. Fight\n2. Disengage\n", 100, "character")
+            while True:
+                choice = input("> ").strip()
+                if choice == "1":
+                    for target_entry in Initiative_order:
+                        character = target_entry["character"]
+                        if character.stat == "NPC" and character.current_hp > 0:
+                            target = character
+                            break
+                    break
+                elif choice == "2":
+                    #roll for disengage,12 of success otherwise skip your turn.
+                    if ability_check(attacker.dexterity, 12, "Disengage"):
+                        story_print("You successfully disengage from combat and retreat to a safe distance.", 100, "character")
+                        escaped = True
+                    else:
+                        story_print("You fail to disengage from combat.", 100, "character")
+                    break
+
+                else:
+                    print("Please enter 1, or 2.")
+            if escaped:
+                return
+
+            if choice == "2":
+                continue
+
+            if target is None:
+                return
+
+            attack_modifier = (attacker.attack_ability - 10) // 2
+            attack(attacker, target, attack_modifier, attacker.damage)
 
 def ability_check(ability_score, dc, check_name):
     """Roll a D20 with an ability modifier and return whether it meets the DC."""
@@ -282,16 +358,16 @@ def ability_check(ability_score, dc, check_name):
     modifier = (ability_score - 10) // 2
     total = roll + modifier
 
-    print(f"\n{check_name} Check — DC {dc}\n")
-    print(f"D20:      {roll}")
-    print(f"Modifier: {modifier:+d}")
-    print(f"Total:    {total}\n")
+    story_print(f"\n{check_name} Check — DC {dc}\n", 100, "word")
+    story_print(f"D20:      {roll}", 100, "word")
+    story_print(f"Modifier: {modifier:+d}", 100, "word")
+    story_print(f"Total:    {total}\n", 100, "word")
 
     if total >= dc:
-        print("SUCCESS")
+        story_print("SUCCESS", 100, "word")
         return True
     else:
-        print("FAILURE")
+        story_print("FAILURE", 100, "word")
         return False
 
 
