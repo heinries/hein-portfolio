@@ -1,0 +1,29 @@
+to do list 
+1. combat mutiple loops while loop. 
+	1.1 return "true" if combat is over else return false.
+	1.2 then implement a while loop."While True"
+2. Build the stop and listen.
+	2.1 Create small small golem (same stats as a rat)
+	2.2 Combat stage
+3. Implement lock puzzle on door. 
+	3.1 If the player DID NOT encounter an enemy, the door uses a simple 3-bit binary lock.
+	0. [000] 1. [001] 2. [010] 3. [011] 4. [100] 5. [101] 6.[110] 7. [111]
+	awnser is 5.[101]
+	if 000 the click thud click
+	if 001 click thud thud
+	if 010 click click click
+	if 011 click click thud
+	if 100 thud thud click
+	if 101 thud thus thud "the door opens"
+	if 110 thud click click
+	if 111 thud click thud
+4. start room 2 
+	The player enters an apparently empty room.
+	A small chest sits alone in the middle of the floor.
+	The chest has a random outcome.
+		1.  Trapped chest
+		2.  Empty chest
+		3.  Potion (wizard healing), (might turn player blue)
+		4.  Hint for Room 3 
+	The player’s class should NOT directly determine what is inside the chest. challenge rating 12 to open.
+5. start room 3 (ready guid to complete the project)

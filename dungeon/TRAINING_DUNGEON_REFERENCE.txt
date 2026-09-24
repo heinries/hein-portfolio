@@ -1,0 +1,482 @@
+TRAINING DUNGEON — DESIGN REFERENCE & TODO
+
+PROJECT GOAL
+
+Create a short, replayable D&D-inspired training dungeon in Python.
+
+The game should: - Take roughly 3–5 minutes to complete. - Contain an
+introduction and 3 rooms. - Demonstrate beginner-friendly Python
+concepts. - Use D20-style ability checks. - Keep the game humorous and
+light while still feeling dangerous. - Track player HP and Steps. - Give
+the player multiple ways to solve encounters. - Eventually run both as a
+terminal game and in the portfolio website.
+
+Core programming concepts to demonstrate: - Variables and constants -
+Classes and objects - Functions - Conditionals - Loops - Random numbers
+and probability - User input - Game state - Ability checks - Error
+handling
+
+============================================================ STORY
+============================================================
+
+INTRODUCTION — ADVENTURER’S GUILD
+
+The player is a junior adventurer hoping to begin their journey at the
+Adventurer’s Guild.
+
+The Guild Master is a short halfling with a big nose, a long beard, and
+a red cap. He cheerfully addresses the new adventurers.
+
+Possible dialogue:
+
+“Welcome, younglings and prospective adventurers!
+
+As adventurers, you will face many challenges and dangerous situations.
+To prepare you for the journey ahead, we have created this training
+dungeon.
+
+Be careful. Even a small training dungeon can be dangerous.
+
+Your task is simple:
+
+Enter the dungeon and return with the BLUE GEM.”
+
+Player then chooses a class: 1. Fighter 2. Rogue 3. Wizard
+
+The class determines the player’s starting attributes.
+
+============================================================ ROOM 1 —
+THE DARK CORRIDOR
+============================================================
+
+DESCRIPTION
+
+The player opens an old door.
+
+Dusty, stale air fills their nose as they step into a long, dark
+corridor.
+
+PLAYER OPTIONS
+
+1.  Walk forward
+2.  Light a torch
+3.  Stop and listen
+
+Each action has a 1-in-3 chance of causing an encounter.
+
+WALK FORWARD
+
+Possible encounter: The player steps on a pressure plate and activates a
+dart trap.
+
+Current design: - 1-in-3 chance of triggering the trap. - Dexterity
+check against DC 12. - Success: dodge the dart. - Failure: take 2
+damage.
+
+LIGHT A TORCH
+
+Possible encounter: The sudden light startles a bat.
+
+The startled bat attacks the player.
+
+This will introduce the basic combat system.
+
+STOP AND LISTEN
+
+Possible encounter: The player hears a small golem approaching.
+
+This may lead to an encounter with the golem.
+
+END OF ROOM 1
+
+At the end of the corridor is a locked door.
+
+If the player DID NOT encounter an enemy, the door uses a simple 3-bit
+binary lock.
+
+Puzzle:
+
+Enter the correct 3-bit code.
+
+Correct answer: 101
+
+Possible rule: - Player gets 3 attempts. - Incorrect attempts cost
+Steps. - Correct answer opens the door to Room 2.
+
+If an enemy was encountered, decide later whether the door is already
+unlocked or whether the puzzle still appears.
+
+============================================================ ROOM 2 —
+THE CHEST ============================================================
+
+DESCRIPTION
+
+The player enters an apparently empty room.
+
+A small chest sits alone in the middle of the floor.
+
+The chest has a random outcome.
+
+IMPORTANT DESIGN DECISION
+
+The player’s class should NOT directly determine what is inside the
+chest.
+
+Instead: - The chest type/content is selected randomly. - The player’s
+attributes may influence how successfully they deal with the chest.
+
+Possible chest outcomes:
+
+1.  Trapped chest
+2.  Empty chest
+3.  Potion
+4.  Hint for Room 3
+
+TRAPPED CHEST
+
+The player may need to detect or avoid the trap.
+
+Possible abilities: - Wisdom to notice danger. - Dexterity to
+avoid/disarm the trap.
+
+EMPTY CHEST
+
+The player dramatically opens the chest…
+
+It contains absolutely nothing.
+
+POTION
+
+Possible joke item:
+
+Potion of Blueness
+
+Effect: The player becomes unnecessarily blue.
+
+Possible status: 🔵 Unnecessarily Blue
+
+This should have little or no meaningful gameplay effect.
+
+HINT
+
+The chest contains information that helps the player in Room 3.
+
+Exact hint still needs to be designed.
+
+============================================================ ROOM 3 —
+THE BLUE GEM
+============================================================
+
+DESCRIPTION
+
+The final room contains a fountain.
+
+Inside the fountain is the BLUE GEM.
+
+A mechanoid guardian protects it.
+
+The player must retrieve the gem.
+
+PLAYER OPTIONS
+
+Possible approaches:
+
+1.  Fight the mechanoid
+2.  Sneak toward the gem
+3.  Sprint, grab the gem, and run
+4.  Examine the room / guardian
+
+FIGHT
+
+The player fights the mechanoid using the combat system.
+
+If the mechanoid is defeated: - Retrieve the blue gem. - Exit door
+opens.
+
+SNEAK / STEAL
+
+The player attempts to sneak past the mechanoid and steal the gem.
+
+Likely Dexterity check.
+
+Success: - Player obtains the gem without combat.
+
+Failure: - Mechanoid detects the player. - Combat begins.
+
+SPRINT / GRAB / RUN
+
+The player makes the exceptionally questionable decision to sprint
+toward the fountain, grab the gem, and run.
+
+This should involve an appropriate ability check.
+
+Failure may cause the mechanoid to attack.
+
+EXAMINE
+
+The player examines the fountain, guardian, or room.
+
+This may reveal: - A weakness. - A safer route. - Information from the
+Room 2 hint.
+
+Exact mechanic still needs to be designed.
+
+============================================================ THE ESCAPE
+============================================================
+
+Once the BLUE GEM is in the player’s hand, the exit door opens.
+
+Unfortunately, there is a chasm/hole between the player and the exit.
+
+The player must jump across.
+
+JUMP CHECK
+
+Likely Strength or Dexterity based.
+
+SUCCESS: The player clears the gap and escapes the dungeon with the Blue
+Gem.
+
+FAILURE: The player falls.
+
+-   Take 3 damage.
+-   The player catches/grabs the ledge.
+-   Make a climb/recovery check.
+-   Do NOT make the first failed jump an automatic death.
+
+If the player climbs out successfully: - Escape with the Blue Gem.
+
+Final ending: Return the Blue Gem to the Adventurer’s Guild.
+
+============================================================ PLAYER
+SYSTEM ============================================================
+
+CURRENT ATTRIBUTES
+
+Strength (STR) - Melee attacks - Lifting - Jumping - Climbing
+
+Dexterity (DEX) - Dodging - Sneaking - Traps - Ranged/finesse actions
+
+Constitution (CON) - Poison - Endurance - Physical resistance
+
+Intelligence (INT) - Puzzles - Mechanisms - Magical knowledge
+
+Wisdom (WIS) - Perception - Listening - Detecting danger
+
+Charisma (CHA) - Persuasion - Intimidation - Creature interaction
+
+Other values: - HP - Armour - Steps
+
+CURRENT CLASS ATTRIBUTES
+
+FIGHTER STR 15 DEX 10 CON 14 INT 8 WIS 10 CHA 10 HP 14 Armour 14
+
+ROGUE STR 10 DEX 15 CON 10 INT 12 WIS 12 CHA 10 HP 10 Armour 12
+
+WIZARD STR 8 DEX 10 CON 10 INT 15 WIS 13 CHA 10 HP 8 Armour 10
+
+============================================================ D20 ABILITY
+CHECK SYSTEM
+============================================================
+
+Formula:
+
+modifier = (ability_score - 10) // 2
+
+total = D20 roll + modifier
+
+Success: total >= DC
+
+Failure: total < DC
+
+Example:
+
+Dexterity = 15 Modifier = +2
+
+D20 roll = 11
+
+Total = 13
+
+Against DC 12: SUCCESS
+
+============================================================ COMBAT —
+PLANNED ============================================================
+
+Keep Version 1 combat deliberately simple.
+
+PLAYER STARTING EQUIPMENT
+
+Fighter: - Training Sword - Attack ability: Strength - Damage: 4
+
+Rogue: - Training Dagger - Attack ability: Dexterity - Damage: 3
+
+Wizard: - Training Wand - Attack ability: Intelligence - Damage: 3
+
+IMPORTANT: Combat should use the player’s stored attack
+ability/properties. Combat should NOT repeatedly check whether the
+player is a Fighter, Rogue, or Wizard.
+
+PLAYER ATTACK
+
+D20 + relevant ability modifier >= enemy Armour
+
+If successful: Apply fixed weapon damage.
+
+ENEMY ATTACK
+
+D20 + enemy attack modifier >= player Armour
+
+If successful: Apply enemy damage.
+
+Player attacks count as Steps. Enemy attacks do NOT count as Steps.
+
+FIRST PLANNED ENEMY — STARTLED BAT
+
+HP: 3 Armour: 10 Attack modifier: +1 Damage: 1
+
+============================================================ STORY
+DISPLAY SYSTEM
+============================================================
+
+Current helper:
+
+story_print(text, timer, mode)
+
+Modes: - “character” = print one character at a time. - “word” = print
+one word at a time. - “sentence” = print the sentence immediately, then
+pause.
+
+Timer is currently measured in milliseconds.
+
+Current constants: MIN_TEXT_DELAY = 1 MAX_TEXT_DELAY = 256
+
+NOTE: The timer design may need adjustment later because a useful pause
+after a full sentence may need to be longer than 256 ms.
+
+story_pause() - Waits for the player to press Enter before continuing.
+
+============================================================ STEP SYSTEM
+============================================================
+
+Steps represent PLAYER ACTIONS / DECISIONS.
+
+Examples that should count as Steps: - Walking forward - Lighting a
+torch - Listening - Attacking - Trying a puzzle answer - Attempting to
+sneak - Attempting to jump
+
+Things that should NOT count as Steps: - Enemy attacks - Story text -
+Status display - Pressing Enter to continue story text
+
+============================================================ END-OF-GAME
+RESULTS — PLANNED
+============================================================
+
+Possible results to display:
+
+-   Character class
+-   Blue Gem retrieved: Yes/No
+-   Starting HP
+-   Remaining HP
+-   Total damage taken
+-   Total Steps
+-   Enemies defeated
+-   Traps triggered
+-   Final score
+-   Humorous Adventurer’s Guild Rank
+
+Exact score formula has NOT been finalised.
+
+============================================================ VERSION 1 —
+DO NOT ADD YET
+============================================================
+
+Avoid overcomplicating the first version.
+
+Do NOT add yet: - Critical hits - Complex inventory - Spell lists -
+Initiative system - Status-effect system - Database - Accounts -
+Multiplayer - Complex skill system - Large enemy hierarchy - Multiple
+files unless game.py becomes difficult to manage
+
+============================================================ TODO LIST
+============================================================
+
+CURRENT / NEXT
+
+[ ] Finish testing Room 1 Walk Forward path. [ ] Replace hard-coded “2
+damage” text with DART_DAMAGE. [ ] Review story_print timing values. [ ]
+Confirm character, word, and sentence display modes work. [ ] Git
+checkpoint current working Room 1 code.
+
+ROOM 1
+
+[ ] Add Light Torch 1-in-3 encounter chance. [ ] Create Startled Bat
+enemy. [ ] Implement basic combat system. [ ] Connect Light Torch
+encounter to Startled Bat combat. [ ] Add Listen 1-in-3 encounter
+chance. [ ] Design/implement Small Golem encounter. [ ] Add
+end-of-corridor door. [ ] Add 3-bit binary lock puzzle. [ ] Correct
+binary answer = 101. [ ] Give player 3 puzzle attempts. [ ] Decide
+exactly how incorrect puzzle attempts affect Steps. [ ] Decide what
+happens to the door if an enemy was encountered.
+
+ROOM 2
+
+[ ] Write Room 2 description. [ ] Add chest interaction. [ ] Randomly
+select chest outcome. [ ] Add trapped chest. [ ] Add empty chest. [ ]
+Add Potion of Blueness. [ ] Add humorous “Unnecessarily Blue” status if
+desired. [ ] Design Room 3 hint. [ ] Add hint chest outcome. [ ] Use
+attributes rather than class checks for chest interactions.
+
+ROOM 3
+
+[ ] Write fountain / mechanoid room description. [ ] Create Mechanoid
+Guardian. [ ] Add Fight option. [ ] Add Sneak/Steal option. [ ] Add
+Sprint/Grab/Run option. [ ] Add Examine option. [ ] Decide appropriate
+checks and DCs. [ ] Make failed sneak lead naturally into combat. [ ]
+Allow gem retrieval after defeating guardian. [ ] Track whether player
+possesses Blue Gem.
+
+ESCAPE
+
+[ ] Open exit when Blue Gem is obtained. [ ] Add chasm/hole description.
+[ ] Implement jump check. [ ] Decide whether jump uses Strength,
+Dexterity, or player choice. [ ] Failed jump causes 3 damage. [ ] Add
+ledge grab / climb recovery check. [ ] Add successful escape ending. [ ]
+Return Blue Gem to Guild Master.
+
+GAME SYSTEMS
+
+[ ] Add starting equipment properties to Player. [ ] Create Enemy class.
+[ ] Create player attack function. [ ] Create enemy attack function. [ ]
+Create basic combat loop. [ ] Add player death handling. [ ] Track
+enemies defeated. [ ] Track traps triggered. [ ] Track Blue Gem
+possession. [ ] Consider game_log / route summary later. [ ] Design
+final score formula. [ ] Design humorous Guild Rank.
+
+POLISH / PORTFOLIO — LATER
+
+[ ] Complete and test terminal version first. [ ] Review code for
+readability. [ ] Add comments/docstrings where they genuinely help. [ ]
+Split files only if game.py becomes unwieldy. [ ] Connect Python game to
+Pyodide. [ ] Build browser terminal interface. [ ] Keep game rules in
+Python. [ ] Keep browser/display logic in JavaScript. [ ] Add optional
+“Show Python” educational panel later. [ ] Test on GitHub Pages. [ ] Add
+final project explanation to portfolio.
+
+============================================================ CURRENT
+DEVELOPMENT RULE
+============================================================
+
+Work incrementally:
+
+1.  Understand the next feature.
+2.  Make a Git checkpoint.
+3.  Implement ONE small milestone.
+4.  Run and test it.
+5.  Review the diff.
+6.  Make sure the code is understandable.
+7.  Commit it.
+8.  Move to the next milestone.
+
+The goal is not only to finish the game.
+
+The goal is to be able to explain how the game works.
